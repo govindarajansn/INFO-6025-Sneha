@@ -1,8 +1,12 @@
 package edu.neu.coe.info6205.threesum;
 
+import edu.neu.coe.info6205.util.Stopwatch;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Implementation of ThreeSum which follows the brute-force approach of
@@ -32,6 +36,25 @@ class ThreeSumCubic implements ThreeSum {
             }
         Collections.sort(triples);
         return triples.stream().distinct().toArray(Triple[]::new);
+    }
+
+    public static void main(String[] args) {
+        int size = 100;
+        int n = 5;
+        for(int i=0;i<n;i++){
+            Supplier<int[]> intsSupplier = new Source(size, size, 3L).intsSupplier(10);
+            int[] ints = intsSupplier.get();
+            System.out.println(Arrays.toString(ints));
+            ThreeSumQuadraticWithCalipers target = new ThreeSumQuadraticWithCalipers(ints);
+            Stopwatch stopwatch = new Stopwatch();
+            Triple[] triples = target.getTriples();
+            long time = stopwatch.lap();
+            System.out.println("Array Size "+ints.length);
+            System.out.println("Triplet size "+triples.length);
+            System.out.println("Elapsed time: " + time + "msecs");
+            i++;
+            size=size*2;
+        }
     }
 
     private final int[] a;

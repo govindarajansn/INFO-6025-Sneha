@@ -1,9 +1,13 @@
 package edu.neu.coe.info6205.threesum;
 
+import edu.neu.coe.info6205.util.Stopwatch;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Implementation of ThreeSum which follows the approach of dividing the solution-space into
@@ -32,8 +36,9 @@ public class ThreeSumQuadraticWithCalipers implements ThreeSum {
     public Triple[] getTriples() {
         List<Triple> triples = new ArrayList<>();
         Collections.sort(triples); // ???
-        for (int i = 0; i < length - 2; i++)
+        for (int i = 0; i < length - 2; i++) {
             triples.addAll(calipers(a, i, Triple::sum));
+        }
         return triples.stream().distinct().toArray(Triple[]::new);
     }
 
@@ -49,8 +54,37 @@ public class ThreeSumQuadraticWithCalipers implements ThreeSum {
     public static List<Triple> calipers(int[] a, int i, Function<Triple, Integer> function) {
         List<Triple> triples = new ArrayList<>();
         // FIXME : use function to qualify triples and to navigate otherwise.
+        int leftPionter = i + 1;
+        int rightPointer = a.length - 1;
+        while (leftPionter < rightPointer) {
+            if (function.apply(new Triple(a[i], a[leftPionter], a[rightPointer])) == 0) {
+                triples.add(new Triple(a[i], a[leftPionter], a[rightPointer]));
+            }
+            if(function.apply(new Triple(a[i], a[leftPionter], a[rightPointer])) > 0) {
+                rightPointer--;
+            } else {
+                leftPionter++;
+            }
+        }
         // END 
         return triples;
+    }
+    public static void main(String[] args) {
+        int size = 100;
+        int n = 5;
+        for(int i=0;i<n;i++){
+            Supplier<int[]> intsSupplier = new Source(size, size, 3L).intsSupplier(10);
+            int[] ints = intsSupplier.get();
+            System.out.println(Arrays.toString(ints));
+            ThreeSumQuadraticWithCalipers target = new ThreeSumQuadraticWithCalipers(ints);
+            Stopwatch stopwatch = new Stopwatch();
+            Triple[] triples = target.getTriples();
+            long time = stopwatch.lap();
+            System.out.println("Array Size "+ints.length);
+            System.out.println("Triplet size "+triples.length);
+            System.out.println("Elapsed time: " + time + "msecs");
+            size=size*2;
+        }
     }
 
     private final int[] a;
