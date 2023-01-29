@@ -45,8 +45,8 @@ class ThreeSumQuadrithmic implements ThreeSum {
     }
 
     public static void main(String[] args) {
-        int size = 100;
-        int n = 5;
+        int size = 70;
+        int n = 6;
         for(int i=0;i<n;i++){
             Supplier<int[]> intsSupplier = new Source(size, size, 3L).intsSupplier(10);
             int[] ints = intsSupplier.get();
@@ -57,8 +57,7 @@ class ThreeSumQuadrithmic implements ThreeSum {
             long time = stopwatch.lap();
             System.out.println("Array Size "+ints.length);
             System.out.println("Triplet size "+triples.length);
-            System.out.println("Elapsed time: " + time + "msecs");
-            i++;
+            System.out.println("Elapsed time: " + time + "ms");
             size=size*2;
         }
     }
