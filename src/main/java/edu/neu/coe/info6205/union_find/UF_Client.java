@@ -23,14 +23,16 @@ public class UF_Client {
         Random rand = new Random();
         int connections = 0;
 
-        while (uf.find(0) != uf.find(n - 1)) {
+        while (uf.components()>1) {
             int p = rand.nextInt(n);
             int q = rand.nextInt(n);
 
             if (!uf.connected(p, q)) {
                 uf.union(p, q);
-                connections++;
+               // connections++;
             }
+            connections++;
+
         }
 
         System.out.println("---------------");
@@ -39,7 +41,7 @@ public class UF_Client {
 
     public static void main(String[] args) {
 //        int n = Integer.parseInt(args[0]);
-        int [] counts = {100, 200, 500, 1000 };
+        int [] counts = {50, 200, 500, 800, 1000, 1300, 2400, 5800 };
         for(int i=0;i< counts.length;i++){
             int connections = count(counts[i]);
             System.out.println("Input = "+ counts[i] +" Number of connections: " + connections);
