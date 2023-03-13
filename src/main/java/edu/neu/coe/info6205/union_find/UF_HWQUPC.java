@@ -81,7 +81,13 @@ public class UF_HWQUPC implements UF {
     public int find(int p) {
         validate(p);
         int root = p;
-        // FIXME
+        while (root != parent[root]){
+            root = parent[root];
+        }
+        if(pathCompression) {
+            doPathCompression(p);
+        }
+
         // END 
         return root;
     }
@@ -169,15 +175,31 @@ public class UF_HWQUPC implements UF {
     private boolean pathCompression;
 
     private void mergeComponents(int i, int j) {
-        // FIXME make shorter root point to taller one
-        // END 
+        int rootP = find(i);
+        int rootQ = find(j);
+        if (rootP == rootQ) return;
+        // make smaller root point to larger one
+        if (height[rootP] < height[rootQ]) {
+            this.updateParent(rootP,rootQ);
+            this.updateHeight(rootQ,rootP);
+
+        }
+        else {
+            this.updateParent(rootQ,rootP);
+            this.updateHeight(rootP,rootQ);
+        }
     }
 
     /**
      * This implements the single-pass path-halving mechanism of path compression
      */
     private void doPathCompression(int i) {
-        // FIXME update parent to value of grandparent
+        int root = i;
+        while(root != parent[root]){
+            parent[root] = parent[parent[root]];
+            root = parent[root];
+        }
+
         // END 
     }
 }
